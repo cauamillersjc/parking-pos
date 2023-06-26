@@ -1,27 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { createStackNavigator } from '@react-navigation/stack';
-import { Login } from './src/screens/Login';
-import { Home } from './src/screens/Home';
 import { NavigationContainer } from '@react-navigation/native';
-
-const Stack = createStackNavigator();
+import database from './src/services/database';
+import { useEffect } from 'react';
+import { Provider } from 'react-redux';
+import store from './src/store';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { RouteStack } from './src/stacks/RouteStack';
 
 export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name='Login'
-          component={Login}
-          options={{ headerShown: false }}
-        />
+  useEffect(() => {
+    // Função assíncrona para criar e iniciar o banco de dados
+    const initializeDatabase = async () => {
+      try {
+        await database.createDatabase();
+        console.log('Banco de dados criado e inicializado com sucesso.');
+      } catch (error) {
+        console.error('Erro ao criar e inicializar o banco de dados:', error);
+      }
+    };
 
-        <Stack.Screen
-          name='Home'
-          component={Home}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    initializeDatabase();
+  }, []);
+
+  return (
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <RouteStack />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </Provider>
   );
 }
