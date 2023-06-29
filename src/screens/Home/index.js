@@ -3,11 +3,13 @@ import { styles } from "./styles"
 import { useEffect, useState } from "react"
 import { PlateDialog } from "../../components/PlateDialog"
 import { newTicket } from "../../services/ticket"
+import { useSelector } from "react-redux"
 
 export const Home = () => {
     const [date, setDate] = useState(new Date().toLocaleString('pt-BR'));
     const [dialogVisible, setDialogVisible] = useState(false);
     const [plate, setPlate] = useState('');
+    const userSelector = useSelector(state => state.userReducer);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -41,7 +43,7 @@ export const Home = () => {
                     {date}
                 </Text>
                 <Text style={styles.headerTextRight}>
-                    Administrador
+                    {userSelector?.user?.name}
                 </Text>
             </View>
 
