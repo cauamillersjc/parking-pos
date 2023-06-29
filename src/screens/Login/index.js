@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Creators as Redux } from "../../redux/userReducer";
 
 export const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("admin@email.com");
+    const [password, setPassword] = useState("q1w2e3r4");
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const navigation = useNavigation();
     const dispatch = useDispatch();

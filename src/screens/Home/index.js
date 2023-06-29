@@ -1,13 +1,15 @@
-import { Text, SafeAreaView, View, TouchableOpacity, Alert } from "react-native"
+import { Text, SafeAreaView, View, TouchableOpacity } from "react-native"
 import { styles } from "./styles"
 import { useEffect, useState } from "react"
 import { PlateDialog } from "../../components/PlateDialog"
-import { newTicket } from "../../services/ticket"
+import { finalizeTicket, newTicket } from "../../services/ticket"
 import { useSelector } from "react-redux"
+import { ScanDialog } from "../../components/ScanDialog"
 
 export const Home = () => {
     const [date, setDate] = useState(new Date().toLocaleString('pt-BR'));
-    const [dialogVisible, setDialogVisible] = useState(false);
+    const [plateDialogVisible, setPlateDialogVisible] = useState(false);
+    const [scanDialogVisible, setScanDialogVisible] = useState(false);
     const [plate, setPlate] = useState('');
     const userSelector = useSelector(state => state.userReducer);
 
@@ -19,22 +21,34 @@ export const Home = () => {
         return () => clearInterval(intervalId);
     }, []);
 
-    const showDialog = () => {
-        setDialogVisible(true);
+    const showPlateDialog = () => {
+        setPlateDialogVisible(true);
     };
 
-    const handleCancel = () => {
-        setDialogVisible(false);
+    const handlePlateCancel = () => {
+        setPlateDialogVisible(false);
         setPlate('');
     };
 
-    const handleConfirm = () => {
+    const handlePlateConfirm = () => {
         if (plate) {
             newTicket(plate);
-            setDialogVisible(false);
+            setPlateDialogVisible(false);
             setPlate('');
         }
     };
+
+    const showScanDialog = () => {
+        setScanDialogVisible(true);
+    };
+
+    const closeScanDialog = () => {
+        setScanDialogVisible(false);
+    };
+
+    const handleCodeScanned = (code) => {
+        finalizeTicket(code);
+    }
 
     return (
         <>
@@ -52,12 +66,15 @@ export const Home = () => {
                     <PlateDialog
                         plate={plate}
                         setPlate={setPlate}
-                        dialogVisible={dialogVisible}
-                        handleCancel={handleCancel}
-                        handleConfirm={handleConfirm}
+                        dialogVisible={plateDialogVisible}
+                        handleCancel={handlePlateCancel}
+                        handleConfirm={handlePlateConfirm}
 
                     />
-                    <TouchableOpacity style={styles.button} onPress={showDialog}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={showPlateDialog}
+                    >
                         <Text style={styles.buttonText}>
                             Novo Avulso
                         </Text>
@@ -65,11 +82,19 @@ export const Home = () => {
                 </View>
 
                 <View style={styles.buttonView}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={showScanDialog}
+                    >
                         <Text style={styles.buttonText}>
                             Finalizar Avulso
                         </Text>
                     </TouchableOpacity>
+                    <ScanDialog
+                        dialogVisible={scanDialogVisible}
+                        closeDialog={closeScanDialog}
+                        handleCodeScanned={handleCodeScanned}
+                    />
                 </View>
             </SafeAreaView>
         </>

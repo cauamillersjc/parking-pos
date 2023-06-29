@@ -1,24 +1,22 @@
-const dateToYYYYmmDDHHMMSS = (date) => {
-    const year = date.getFullYear().toString();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const hour = date.getHours().toString().padStart(2, '0');
-    const minute = date.getMinutes().toString().padStart(2, '0');
-    const second = date.getSeconds().toString().padStart(2, '0');
+import moment from "moment";
 
-    return `${year}${month}${day}${hour}${minute}${second}`;
-}
+const formatSecondsToHMS = (permanence) => {
+    const duration = moment.duration(permanence, "seconds");
 
-const dateToSQL = (date) => {
-    return date.toISOString().replace('T', ' ').slice(0, 19);
-}
+    const hours = duration.hours().toString().padStart(2, '0');
+    const minutes = duration.minutes().toString().padStart(2, '0');
+    const seconds = duration.seconds().toString().padStart(2, '0');
 
-const datesSecondsDiff = (date1, date2) => {
-    return Math.floor((date2 - date1) / 1000);
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    return formattedTime;
+};
+
+const dateDiffInSeconds = (date1, date2) => {
+    return Math.round(moment.duration(date2.diff(date1)).asSeconds());
 }
 
 export default {
-    dateToYYYYmmDDHHMMSS,
-    dateToSQL,
-    datesSecondsDiff,
+    formatSecondsToHMS,
+    dateDiffInSeconds,
 }

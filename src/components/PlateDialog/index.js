@@ -1,6 +1,6 @@
 import Dialog from 'react-native-dialog';
 import { TextInputMask } from 'react-native-masked-text';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, BackHandler } from 'react-native';
 
 const styles = StyleSheet.create({
     input: {
@@ -15,12 +15,16 @@ const styles = StyleSheet.create({
 
 export const PlateDialog = ({ plate, setPlate, dialogVisible, handleCancel, handleConfirm }) => {
     return (
-        <Dialog.Container visible={dialogVisible}>
+        <Dialog.Container
+            visible={dialogVisible}
+            onBackdropPress={() => handleCancel()}
+        >
             <Dialog.Title>Digite a placa</Dialog.Title>
             <TextInputMask
                 autoCapitalize="characters"
                 style={styles.input}
                 type="custom"
+                keyboardType='visible-password'
                 options={{
                     mask: 'AAA-9*99',
                 }}

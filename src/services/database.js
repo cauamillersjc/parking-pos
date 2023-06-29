@@ -48,7 +48,7 @@ const createDatabase = async () => {
             [plate] nvarchar(255),
             [status] int
         );`,
-          `CREATE TABLE IF NOT EXISTS [users] (
+        `CREATE TABLE IF NOT EXISTS [users] (
             [id] INTEGER PRIMARY KEY AUTOINCREMENT,
             [email] nvarchar(255),
             [password] nvarchar(255),
@@ -114,7 +114,7 @@ const insertTicket = async (code, entrance, plate, isFirst) => {
         `;
     }
 
-    const params = [code, dateFormat.dateToSQL(entrance), plate]
+    const params = [code, entrance, plate]
 
     try {
         await executeQuery(db, query, params);
@@ -126,6 +126,31 @@ const insertTicket = async (code, entrance, plate, isFirst) => {
         return result.rows.item(0);
     } catch (error) {
         console.error(`Erro ao inserir ticket:`, error);
+        return null;
+    }
+}
+
+const finalizeTicket = async (code, exit, permanence) => {
+    const db = openDatabase();
+
+    const query = `
+        UPDATE tickets
+        SET exit = ?, permanence = ?, status = 1
+        WHERE code = ?;
+    `;
+
+    const params = [exit, permanence, code]
+
+    try {
+        await executeQuery(db, query, params);
+
+        // Consultar o registro recém-inserido
+        const selectQuery = 'SELECT * FROM tickets WHERE code = ? ORDER BY id DESC LIMIT 1';
+        const selectParams = [code];
+        const result = await executeQuery(db, selectQuery, selectParams);
+        return result.rows.item(0);
+    } catch (error) {
+        console.error(`Erro ao finalizar ticket:`, error);
         return null;
     }
 }
@@ -153,7 +178,7 @@ const lastTicketId = async () => {
 const getTicketByCode = async (code) => {
     const db = openDatabase();
 
-    const query = `SELECT * FROM tickets WHERE code = ? LIMIT 1`;
+    const query = `SELECT * FROM tickets WHERE code = ? AND status = 0 LIMIT 1`;
 
     const params = [code]
 
@@ -173,4 +198,5 @@ export default {
     insertTicket,
     lastTicketId,
     getTicketByCode,
+    finalizeTicket,
 };
