@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import store from './src/store';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RouteStack } from './src/stacks/RouteStack';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './src/config/toast';
 
 export default function App() {
   useEffect(() => {
@@ -26,6 +28,10 @@ export default function App() {
       <SafeAreaProvider>
         <NavigationContainer>
           <RouteStack />
+          <Toast 
+            config={toastConfig}
+            visibilityTime={6000}
+          />
         </NavigationContainer>
       </SafeAreaProvider>
     </Provider>

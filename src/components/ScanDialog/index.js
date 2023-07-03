@@ -4,11 +4,21 @@ import { Text, Button, View } from "react-native";
 import { StyleSheet } from "react-native";
 import Dialog from 'react-native-dialog';
 import { sleep } from "../../utils/sleep";
+import { secondaryColor } from "../../constants/colors";
 
 const styles = StyleSheet.create({
     scan: {
-        height: 300,
+        height: 400,
+        width: 300,
     },
+    container: {
+        borderRadius: 28,
+    },
+    title: {
+        alignSelf: 'center',
+        color: secondaryColor,
+        fontSize: 22
+    }
 });
 
 export const ScanDialog = ({ dialogVisible, closeDialog, handleCodeScanned }) => {
@@ -43,8 +53,9 @@ export const ScanDialog = ({ dialogVisible, closeDialog, handleCodeScanned }) =>
         <Dialog.Container
             visible={dialogVisible}
             onBackdropPress={() => closeDialog()}
+            contentStyle={styles.container}
         >
-            <Dialog.Title style={{ alignSelf: 'center' }}>
+            <Dialog.Title style={styles.title}>
                 Escaneie o código do ticket
             </Dialog.Title>
 

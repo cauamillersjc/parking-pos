@@ -1,10 +1,8 @@
 export const Types = {
     USER: '@user',
-    AUTH: '@auth',
 }
 
 const initialState = {
-    saved_user: {},
     user: {
         id: 0,
         email: '',
@@ -18,11 +16,6 @@ export const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.user
-            };
-        case Types.AUTH:
-            return {
-                ...state,
-                saved_user: action.saved_user
             };
         default:
             return state;

@@ -30,7 +30,7 @@ export const PlateDialog = ({ plate, setPlate, dialogVisible, handleCancel, hand
                 }}
                 value={plate}
                 onChangeText={(text) => setPlate(text.toUpperCase())}
-                autoFocus
+                autoFocus={true}
             />
             <Dialog.Button label="Cancelar" onPress={handleCancel} />
             <Dialog.Button label="Confirmar" onPress={handleConfirm} />

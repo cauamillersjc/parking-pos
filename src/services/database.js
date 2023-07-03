@@ -135,7 +135,7 @@ const finalizeTicket = async (code, exit, permanence) => {
 
     const query = `
         UPDATE tickets
-        SET exit = ?, permanence = ?, status = 1
+        SET exit = ?, permanence = ?, status = 0
         WHERE code = ?;
     `;
 

@@ -2,9 +2,12 @@ import { Text, SafeAreaView, View, TouchableOpacity } from "react-native"
 import { styles } from "./styles"
 import { useEffect, useState } from "react"
 import { PlateDialog } from "../../components/PlateDialog"
-import { finalizeTicket, newTicket } from "../../services/ticket"
+import { scanTicket, newTicket } from "../../services/ticket"
 import { useSelector } from "react-redux"
 import { ScanDialog } from "../../components/ScanDialog"
+import { useNavigation } from "@react-navigation/native"
+import { Creators as TicketRedux } from "../../redux/ticketReducer"
+import { useDispatch } from "react-redux"
 
 export const Home = () => {
     const [date, setDate] = useState(new Date().toLocaleString('pt-BR'));
@@ -12,6 +15,8 @@ export const Home = () => {
     const [scanDialogVisible, setScanDialogVisible] = useState(false);
     const [plate, setPlate] = useState('');
     const userSelector = useSelector(state => state.userReducer);
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -46,8 +51,16 @@ export const Home = () => {
         setScanDialogVisible(false);
     };
 
-    const handleCodeScanned = (code) => {
-        finalizeTicket(code);
+    const handleCodeScanned = async (code) => {
+        const ticket = await scanTicket(code);
+        if(ticket){
+            dispatch(TicketRedux.addTicketAction(ticket));
+            navigation.navigate('Payment');
+        }
+    }
+
+    const navigateToSettings = () => {
+        navigation.navigate('Settings');
     }
 
     return (
@@ -95,6 +108,17 @@ export const Home = () => {
                         closeDialog={closeScanDialog}
                         handleCodeScanned={handleCodeScanned}
                     />
+                </View>
+
+                <View style={styles.buttonView}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={navigateToSettings}
+                    >
+                        <Text style={styles.buttonText}>
+                            Configurações
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </SafeAreaView>
         </>

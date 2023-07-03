@@ -27,14 +27,34 @@ export const newTicket = async (plate) => {
     console.log(ticket);
 }
 
-export const finalizeTicket = async (code) => {
+export const scanTicket = async (code) => {
     const ticket = await database.getTicketByCode(code);
-    if (ticket) {
+
+    if(ticket){
         const entrance = moment(ticket.entrance);
         const exit = moment();
         const permanence = dateFormat.dateDiffInSeconds(entrance, exit);
 
-        const updatedTicket = await database.finalizeTicket(code, exit.format('YYYY-MM-DD HH:mm:ss'), permanence);
+        ticket.exit = moment().format('YYYY-MM-DD HH:mm:ss');
+        ticket.permanence = permanence;
+
+        return ticket;
+    }
+    else{
+        Toast.show({
+            type: 'error',
+            text1: 'Ticket não encontrado!',
+        });
+        return null;
+    }
+}
+
+export const finalizeTicket = async (ticket) => {
+    if (ticket) {
+        const entrance = moment(ticket.entrance);
+        const exit = moment(ticket.exit);
+        const permanence = dateFormat.dateDiffInSeconds(entrance, exit);
+        const updatedTicket = await database.finalizeTicket(ticket.code, ticket.exit.format('YYYY-MM-DD HH:mm:ss'), permanence);
 
         console.log(updatedTicket);
 
