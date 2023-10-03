@@ -33,7 +33,7 @@ export const Login = () => {
                 placeholder="Digite seu e-mail"
                 value={email}
                 onChangeText={setEmail}
-                icon={'person'}
+                icon='person'
                 keyboardType='email-address'
             />
 
@@ -44,7 +44,7 @@ export const Login = () => {
                 password={true}
                 passwordVisible={!isPasswordVisible}
                 changeVisible={changePasswordVisible}
-                icon={'key'}
+                icon='key'
             />
 
             <TouchableOpacity

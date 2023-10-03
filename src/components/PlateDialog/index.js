@@ -19,7 +19,9 @@ export const PlateDialog = ({ plate, setPlate, dialogVisible, handleCancel, hand
             visible={dialogVisible}
             onBackdropPress={() => handleCancel()}
         >
-            <Dialog.Title>Digite a placa</Dialog.Title>
+            <Dialog.Title>
+                Digite a placa
+            </Dialog.Title>
             <TextInputMask
                 autoCapitalize="characters"
                 style={styles.input}

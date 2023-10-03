@@ -14,14 +14,16 @@ const styles = StyleSheet.create({
         height: 45,
         backgroundColor: '#fff',
         flexDirection: 'row',
-        borderWidth: 1.25,
+        borderBottomWidth: 2,
         borderStyle: 'solid',
         borderColor: secondaryColor,
-        borderRadius: 14,
+        borderTopRightRadius: 6,
+        borderTopLeftRadius: 6,
         paddingVertical: 0,
         paddingHorizontal: 15,
         marginBottom: 15,
         alignItems: 'center',
+        elevation: 7,
     }
 })
 
